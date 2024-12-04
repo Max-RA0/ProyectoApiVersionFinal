@@ -1,0 +1,229 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Servicios Legales</title>
+    <style>
+        /* Estilos generales */
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f9f9f9;
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            line-height: 1.6;
+        }
+
+        /* Header */
+        header {
+            background-color: #2980b9;
+            padding: 10px 30px;
+            color: white;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: relative;
+        }
+
+        header img {
+            height: 120px;
+            /* Ajuste de tamaño del logo */
+            width: 120px;
+            border-radius: 50px;
+            box-shadow: black 7px 7px 7px;
+        }
+
+        /* Navbar */
+        nav {
+            display: flex;
+            gap: 30px;
+        }
+
+        nav a {
+            color: white;
+            text-decoration: none;
+            font-weight: bold;
+            padding: 10px 15px;
+            /* Añadí padding para mejorar la separación */
+            border-radius: 5px;
+            /* Bordes redondeados para enlaces */
+            transition: background-color 0.3s ease;
+        }
+
+        nav a:hover {
+            background-color: #3498db;
+            color: white;
+        }
+
+        /* Contenedor principal */
+        .container {
+            width: 80%;
+            max-width: 1200px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: #ffffff;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            font-size: 32px;
+            color: #2c3e50;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        h2 {
+            font-size: 24px;
+            color: #2980b9;
+            margin-top: 40px;
+            margin-bottom: 10px;
+        }
+
+        ul {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        li {
+            background-color: #ecf0f1;
+            margin: 10px 0;
+            padding: 15px;
+            border-radius: 6px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 16px;
+        }
+
+        .acciones {
+            display: flex;
+            gap: 10px;
+        }
+
+        li a {
+            text-decoration: none;
+            font-weight: bold;
+            color: #2980b9;
+            padding: 5px 10px;
+            border-radius: 4px;
+            transition: background-color 0.3s ease;
+        }
+
+        li a:hover {
+            background-color: #2980b9;
+            color: #fff;
+        }
+
+        a {
+            display: inline-block;
+            margin-top: 20px;
+            padding: 10px 20px;
+            text-decoration: none;
+            background-color: #3498db;
+            color: #fff;
+            border-radius: 4px;
+            text-align: center;
+            font-weight: bold;
+            transition: background-color 0.3s ease;
+        }
+
+        a:hover {
+            background-color: #2980b9;
+        }
+
+        /* Estilos del formulario de búsqueda */
+        form {
+            display: flex;
+            justify-content: center;
+            margin-top: 20px;
+            margin-bottom: 30px;
+        }
+
+        form input[type="text"] {
+            width: 50%;
+            padding: 10px 15px;
+            font-size: 16px;
+            border: 2px solid #2980b9;
+            border-radius: 4px;
+            margin-right: 10px;
+            box-sizing: border-box;
+            transition: border-color 0.3s ease;
+        }
+
+        form input[type="text"]:focus {
+            outline: none;
+            border-color: #3498db;
+        }
+
+        form button {
+            padding: 10px 20px;
+            font-size: 16px;
+            background-color: #2980b9;
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        form button:hover {
+            background-color: #3498db;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Header con logo y navbar -->
+    <header>
+        <img src="{% static 'logo.jpeg' %}" alt="Logo">
+        <nav>
+            <a href="{% url 'lista_asesoria' tipo='asesoria' %}">Asesorías Legales</a>
+            <a href="{% url 'lista_servicios' tipo='divorcio' %}">Divorcios</a>
+            <a href="{% url 'crear_servicio' tipo='asesoria' %}">Crear Asesoría</a>
+            <a href="{% url 'crear_servicio' tipo='divorcio' %}">Crear Divorcio</a>
+        </nav>
+    </header>
+    <div class="container">
+        <h1>Bienvenido a los Servicios Legales</h1>
+
+        <form method="GET" action="{% url 'search' %}">
+            <input type="text" name="query" placeholder="Buscar servicios..." value="{{ query }}">
+            <button type="submit">Buscar</button>
+        </form>
+
+        <h2>Asesorías Legales</h2>
+        <ul>
+            {% for servicio, detalle in servicios_asesoria %}
+                <li>
+                    <span>{{ detalle }}</span>
+                    <div class="acciones">
+                        <a href="{% url 'lista_asesoria' tipo='asesoria' %}">Ver mas</a>
+                    </div>
+                </li>
+            {% empty %}
+                <li>No hay asesorías disponibles.</li>
+            {% endfor %}
+        </ul>
+
+        <h2>Servicios de Divorcio</h2>
+        <ul>
+            {% for servicio, detalle in servicios_divorcio %}
+                <li>
+                    <span>{{ detalle }}</span>
+                    <div class="acciones">
+                        <a href="{% url 'lista_servicios' tipo='divorcio' %}">Ver Más</a>
+                    </div>
+                </li>
+            {% empty %}
+                <li>No hay servicios de divorcio disponibles.</li>
+            {% endfor %}
+        </ul>
+    </div>
+</body>
+
+</html>
